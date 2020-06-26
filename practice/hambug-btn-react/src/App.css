@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+}
+
+.title {
+  display: inline-block;
+  margin: 0;
+  padding: 20px;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.menu-icon {
+  display: inline-block;
+  float: right;
+  padding: 30px 35px;
+}
+
+.hambug-icon {
+  background-color: #333;
+  display: block;
+  width: 18px;
+  height: 2px;
+  position: relative;
+  transition: background .2s ease-in-out;
+}
+
+.hambug-icon:before, .hambug-icon:after {
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  display: block;
+  content: '';
+  position: absolute;
+  transition: all .2s ease-in-out;
+}
+
+.hambug-icon:before {
+  top: -5px;
+}
+
+.hambug-icon:after {
+  top: 5px;
+}
+
+.hambug-icon.active {
+  background: transparent;
+}
+
+.hambug-icon.active:before {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+.hambug-icon.active:after {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.sub-menu{
+  list-style: none;
+  padding: 0px;
+  margin: 0px 30px;
+  width: 300px;
+  display: block;
+  float: right;
+  background-color: #ececec4d;
+  clear: both;
+  position: relative;
+  top: -10px;
+
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .2s ease-in-out;
+}
+
+.sub-menu li {
+  margin: 0px;
+  padding: 20px;
+  font-size: 17px;
+  border-bottom: 1px solid #fff;
+}
+
+.sub-menu li:hover {
+  background-color: #edf0f3;
+}
+
+.sub-menu.active {
+  /* display: block */
+  max-height: 300px;
+}
