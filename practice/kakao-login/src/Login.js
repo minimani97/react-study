@@ -1,33 +1,24 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { useEffect, memo } from 'react';
+
 import './App.css';
+import { SET_IS_LOGIN, SET_LOGIN_INIT, SET_IS_OPEN_FALSE } from './App';
 
-class Login extends Component {
-    state = {
-        isOpen: false,
-        isLogin: false
-    }
+const Login = memo(({ loginInit, dispatch, history }) => {
+    useEffect(() => {
+        if(!loginInit) {
+            window.Kakao.init('2c98faedb93ac20b0922ca71f3dc61e9');
+            dispatch({ type: SET_LOGIN_INIT });
+        }
+    }, []);
 
-    componentDidMount() {
-        window.Kakao.init('APP_KEY');
-    }
-
-    onClickMenu = () => {
-        this.setState((prevState) => {
-            return {
-                isOpen: !prevState.isOpen
-            }
-        });
-    };
-
-    loginWithKakao = () => {
+    const loginWithKakao = () => {
         window.Kakao.Auth.login({
             success: (authObj) => {
-                this.setState({
-                    isLogin: true
-                });
+                dispatch({ type: SET_IS_LOGIN });
                 console.log(JSON.stringify(authObj));
-                alert(JSON.stringify(authObj));
+                alert('로그인되었습니다.');
+                dispatch({ type: SET_IS_OPEN_FALSE });
+                history.push('/');
             },
             fail: (err) => {
                 alert(JSON.stringify(err));
@@ -35,45 +26,14 @@ class Login extends Component {
         });
     };
 
-    logout = () => {
-        console.log(window.Kakao.Auth.getAccessToken());
-        if(!window.Kakao.Auth.getAccessToken()) {
-            alert('로그인이 되어있지 않습니다!\n로그인을 해주세요:)');
-            return;
-        }
-        window.Kakao.Auth.logout(() => {
-            alert('로그아웃 되었습니다.');
-            this.setState({
-                isLogin: false
-            })
-        });
-    }
-
-    render() {
-        const { isOpen, isLogin } = this.state;
-
-        return (
-            <>
-                <header>
-                    <label className="title">청춘예찬 한글입숨</label>
-                    <div className="menu-icon" onClick={this.onClickMenu}>
-                        <div className={"hambug-icon" + (isOpen ? ' active' : '')}></div>
-                    </div>
-                    <ul className={"sub-menu" + (isOpen ? ' active' : '')}>
-                        <li>왜 사용하나요?</li>
-                        <li>한글입숨 생성하기</li>
-                        {(isLogin ? <li onClick={this.logout}>로그아웃</li> : <li>로그인</li>)}
-                    </ul>
-                </header>
-                <section>
-                <h4>카카오 계정으로 로그인하세요!</h4>
-                <a className="kakao-login-btn" onClick={this.loginWithKakao}>
-                    <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="200" />
-                </a>
-            </section>
-            </>
-        );
-    }
-}
+    return (
+        <>
+            <h4 className="upper-block">카카오 계정으로 로그인하세요!</h4>
+            <a className="kakao-login-btn" onClick={loginWithKakao}>
+                <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="200" />
+            </a>
+        </>
+    );
+});
 
 export default Login;
