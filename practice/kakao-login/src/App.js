@@ -9,7 +9,9 @@ import Main from './Main';
 const initialState = {
     isOpen: false,
     isLogin: false,
-    loginInit: false
+    loginInit: false,
+    userName: '로그인하세요',
+    profileUrl: 'https://goch.co.kr/img/mob/icon_default_img.png'
 };
 
 export const SET_IS_OPEN = 'SET_IS_OPEN';
@@ -17,6 +19,7 @@ export const SET_IS_OPEN = 'SET_IS_OPEN';
 export const SET_IS_OPEN_FALSE = 'SET_IS_OPEN_FALSE';
 export const SET_IS_LOGIN = 'SET_IS_LOGIN';
 export const SET_LOGIN_INIT = 'SET_LOGIN_INIT';
+export const SET_USER_INFO = 'SET_USER_INFO';
 
 const reducer = (state, action) => {
     switch(action.type) {
@@ -45,6 +48,13 @@ const reducer = (state, action) => {
                 ...state,
                 loginInit: !state.loginInit
             }
+        case SET_USER_INFO: {
+            return {
+                ...state,
+                userName: action.name,
+                profileUrl: action.profile
+            }
+        }
         default:
             return state;
     }
@@ -52,7 +62,7 @@ const reducer = (state, action) => {
 
 const App = memo(() => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { isOpen, isLogin, loginInit } = state;
+    const { isOpen, isLogin, loginInit, userName, profileUrl } = state;
 
     const onClickMenu = () => {
         dispatch({ type: SET_IS_OPEN });
@@ -77,10 +87,20 @@ const App = memo(() => {
                 <label className="title">
                     <Link to="/">한글입숨</Link>
                 </label>
+                {/* <img className="profile-img" src={profileUrl}></img>
+                <label className="user-info">{userName}</label> */}
                 <div className="menu-icon" onClick={onClickMenu}>
                     <div className={"hambug-icon" + (isOpen ? ' active' : '')}></div>
                 </div>
                 <ul className={"sub-menu" + (isOpen ? ' active' : '')}>
+                    <li className="user-info">
+                        <div className="profile-img-area">
+                            <img className="profile-img" src={profileUrl}></img>
+                        </div>
+                        <div className="user-name-area">
+                            <div className="user-name">{userName}</div>
+                        </div>
+                    </li>
                     <Link to="/test/purpose"><li>왜 사용하나요?</li></Link>
                     <Link to="/test/generator"><li>한글입숨 생성하기</li></Link>
                     {(isLogin ? <li onClick={logout}>로그아웃</li> : <Link to="/test/login"><li>로그인</li></Link>)}
