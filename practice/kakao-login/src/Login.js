@@ -6,7 +6,7 @@ import { SET_IS_LOGIN, SET_LOGIN_INIT, SET_IS_OPEN_FALSE, SET_USER_INFO } from '
 const Login = memo(({ loginInit, dispatch, history }) => {
     useEffect(() => {
         if(!loginInit) {
-            window.Kakao.init('APP_KEY');
+            window.Kakao.init('9e7754f81ef8a3587fafc5b58ab100fb');
             dispatch({ type: SET_LOGIN_INIT });
         }
     }, []);

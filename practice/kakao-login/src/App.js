@@ -60,7 +60,7 @@ const reducer = (state, action) => {
     }
 }
 
-const App = memo(() => {
+const App = memo(({ history }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { isOpen, isLogin, loginInit, userName, profileUrl } = state;
 
@@ -76,19 +76,23 @@ const App = memo(() => {
         }
         window.Kakao.Auth.logout(() => {
             alert('로그아웃 되었습니다.');
+            
             dispatch({ type: SET_IS_LOGIN });
             dispatch({ type: SET_IS_OPEN_FALSE });
+            
+            // TODO: 로그아웃 시 프로필이 기본 값으로 변경되지 않는 부분 수정 필요 
+            // dispatch({ type: SET_USER_INFO, userName: 'ㅎㅎㅎㅎ', profileUrl: 'ㅎㅅㅎ'})
+            // console.log("logout 시 : " + userName + " / " + profileUrl);
         });
     };
 
+    console.log("rendering~")
     return (
         <BrowserRouter>
             <header>
                 <label className="title">
                     <Link to="/">한글입숨</Link>
                 </label>
-                {/* <img className="profile-img" src={profileUrl}></img>
-                <label className="user-info">{userName}</label> */}
                 <div className="menu-icon" onClick={onClickMenu}>
                     <div className={"hambug-icon" + (isOpen ? ' active' : '')}></div>
                 </div>
