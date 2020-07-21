@@ -6,21 +6,21 @@ import post from './post';
 
 const initialState = {
     user: {},
-    post: {}
+    post: {},
 };
 
 // 이전 상태와 액션을 통해 다음 상태를 만들어내는 것
 const rootReducer = combineReducers({
     index: (state = {}, action) => {
-        switch(action.type) {
-            case HYDRATE: 
+        switch (action.type) {
+            case HYDRATE:
                 return { ...state, ...action.payload };
             default:
                 return state;
         }
     },
     user,
-    post
+    post,
 });
 
 export default rootReducer;

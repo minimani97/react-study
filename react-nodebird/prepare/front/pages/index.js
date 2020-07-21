@@ -1,4 +1,5 @@
-import React from 'react';  // next에서 자동으로 넣어주기 때문에 넣어도 되고 안 넣어도 됨!
+// next에서 자동으로 넣어주기 때문에 넣어도 되고 안 넣어도 됨!
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import AppLayout from '../components/AppLayout';
@@ -15,6 +16,6 @@ const Home = () => {
             {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
         </AppLayout>
     );
-}
+};
 
 export default Home;

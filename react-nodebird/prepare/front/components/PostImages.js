@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import React, { useState, useCallback } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 
-import ImagesZoom from './imagesZoom';  // 폴더를 import하면 알아서 index.js 파일을 불러온다 :)
+// 폴더를 import하면 알아서 index.js 파일을 불러온다 :)
+import ImagesZoom from './imagesZoom';
 
 const PostImages = ({ images }) => {
     const [showImagesZoom, setShowImagesZoom] = useState(false);
-    
+
     const onZoom = useCallback(() => {
         setShowImagesZoom(true);
     }, []);
@@ -14,7 +15,7 @@ const PostImages = ({ images }) => {
         setShowImagesZoom(false);
     }, []);
 
-    if(images.length === 1) {
+    if (images.length === 1) {
         return (
             <>
                 <img role="presentation" src={images[0].src} alt={images[0].src} onClick={onZoom} />
@@ -22,7 +23,7 @@ const PostImages = ({ images }) => {
             </>
         );
     }
-    if(images.length === 2) {
+    if (images.length === 2) {
         return (
             <>
                 <img role="presentation" style={{ width: '50%', display: 'inline-block' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
@@ -37,7 +38,7 @@ const PostImages = ({ images }) => {
                 <img role="presentation" style={{ width: '50%' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
                 <div
                     role="presentation"
-                    style={{ display: 'inline-block', width: '50%', textAlign: 'center', verticalAlign: 'middle', fontSize: '30px', fontWeight: 'bolder'}}
+                    style={{ display: 'inline-block', width: '50%', textAlign: 'center', verticalAlign: 'middle', fontSize: '30px', fontWeight: 'bolder' }}
                     onClick={onZoom}
                 >
                     <PlusOutlined />
@@ -51,7 +52,7 @@ const PostImages = ({ images }) => {
 };
 
 PostImages.propTypes = {
-    images: PropTypes.arrayOf(PropTypes.object)
-}
+    images: PropTypes.arrayOf(PropTypes.object),
+};
 
 export default PostImages;

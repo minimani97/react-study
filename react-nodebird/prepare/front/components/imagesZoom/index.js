@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Slick from 'react-slick';
 
-import { Overlay, Global, Header, CloseButton, ImageWrapper, Indicator, SlickWrapper, PrevArrow, NextArrow } from './styles';
+import { Overlay, Global, CloseButton, ImageWrapper, Indicator, SlickWrapper, PrevArrow, NextArrow } from './styles';
 
 const ImagesZoom = ({ images, onClose }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,7 +13,7 @@ const ImagesZoom = ({ images, onClose }) => {
             <SlickWrapper>
                 <div>
                     <CloseButton onClick={onClose}>X</CloseButton>
-                    <Slick 
+                    <Slick
                         initialSlide={0}
                         beforeChange={(slide) => setCurrentSlide(slide)}
                         infinite
@@ -45,7 +45,7 @@ const ImagesZoom = ({ images, onClose }) => {
 
 ImagesZoom.propTypes = {
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
-    onClose: PropTypes.func.isRequired
-}
+    onClose: PropTypes.func.isRequired,
+};
 
 export default ImagesZoom;

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import wrapper from '../store/configureStore';
 import withReduxSaga from 'next-redux-saga';
-
 import 'antd/dist/antd.css';
+
+import wrapper from '../store/configureStore';
 
 const NodeBird = ({ Component }) => {
     return (
@@ -18,8 +18,8 @@ const NodeBird = ({ Component }) => {
     )
 };
 
-NodeBird.propTypes = { 
+NodeBird.propTypes = {
     Component: PropTypes.elementType.isRequried
-}
+};
 
 export default wrapper.withRedux(withReduxSaga(NodeBird));
