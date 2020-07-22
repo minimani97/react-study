@@ -1,40 +1,9 @@
 import shortId from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 export const initialState = {
-    mainPosts: [{
-        id: 1,
-        User: {
-            id: 1,
-            nickname: 'minimani',
-        },
-        content: '노드버드는 내꺼다 후후 #노드버드 #리액트강좌',
-        Images: [{
-            id: shortId.generate(),
-            src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
-        }, {
-            id: shortId.generate(),
-            src: 'https://pbs.twimg.com/profile_images/1188487693145010177/8x3CDlWV_400x400.jpg',
-        }, {
-            id: shortId.generate(),
-            src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
-        }],
-        Comments: [{
-            id: shortId.generate(),
-            User: {
-                id: shortId.generate(),
-                nickname: 'nimgnues97',
-            },
-            content: '오왓 노드 책 개정판이 나왔네요!',
-        }, {
-            id: shortId.generate(),
-            User: {
-                id: shortId.generate(),
-                nickname: 'Kate',
-            },
-            content: '노드버드 강좌도 리뉴얼하시나요~?',
-        }],
-    }],
+    mainPosts: [],
     imagePaths: [],
 
     addPostLoading: false,
@@ -49,6 +18,27 @@ export const initialState = {
     addCommentDone: false,
     addCommentError: null,
 };
+
+initialState.mainPosts = initialState.mainPosts.concat(
+    Array(20).fill().map(() => ({
+        id: shortId.generate(),
+        User: {
+            id: shortId.generate(),
+            nickname: faker.name.findName(),
+        },
+        content: faker.lorem.paragraph(),
+        Images: [{
+            src: faker.image.image(),
+        }],
+        Comments: [{
+            User: {
+                id: shortId.generate(),
+                nickname: faker.name.findName(),
+            },
+            content: faker.lorem.sentence(),
+        }],
+    })),
+);
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
