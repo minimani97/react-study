@@ -1,3 +1,5 @@
+import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "./post";
+
 export const initialState = {
     logInLoading: false, // 로그인 시도 중
     logInDone: false,
@@ -49,9 +51,9 @@ const dummyUser = (data) => ({
     ...data,
     nickname: 'Kate',
     id: 1,
-    Posts: [],
-    Followings: [],
-    Followers: [],
+    Posts: [{id: 1}],
+    Followings: [{nickname: '이재욱'}, {nickname: 'NodeBird Korea'}, {nickname: '곽승민'}],
+    Followers: [{nickname: '이재욱'}, {nickname: '곽승민'}],
 });
 
 // action creator
@@ -150,6 +152,22 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 changeNicknameLoading: false,
                 changeNicknameError: action.error
+            };
+        case ADD_POST_TO_ME:
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: [{ id: action.data }, ...state.me.Posts],
+                },
+            };
+        case REMOVE_POST_OF_ME:
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: state.me.Posts.filter((v) => v.id !== action.data),
+                },
             };
         default:
             return state;
