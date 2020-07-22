@@ -10,12 +10,13 @@ function addPostAPI(data) {
     return axios.post('/api/post', data);
 }
 
-function* addPost() {
+function* addPost(action) {
     try {
         // const result = yield call(addPostAPI, action.data);
         yield delay(1000);
         yield put({
             type: ADD_POST_SUCCESS,
+            data: action.data,
         });
     } catch (err) {
         yield put({
@@ -29,12 +30,13 @@ function addCommentAPI(data) {
     return axios.post(`/api/${data.postId}/comment`, data);
 }
 
-function* addComment() {
+function* addComment(action) {
     try {
         // const result = yield call(addCommentAPI, action.data);
         yield delay(1000);
         yield put({
             type: ADD_COMMENT_SUCCESS,
+            data: action.data
         });
     } catch (err) {
         yield put({
