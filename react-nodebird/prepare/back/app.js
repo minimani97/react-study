@@ -4,9 +4,11 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
 const db = require('./models');
 const passportConfig = require('./passport');
 
@@ -20,6 +22,8 @@ db.sequelize.sync()
     .catch(console.error);
 
 passportConfig();
+
+app.use(morgan('dev'));
 
 app.use(cors({
     origin: true,   // 보낸 곳의 주소가 자동으로 들어감
@@ -43,6 +47,7 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/post', postRouter);
+app.use('/posts', postsRouter);
 
 app.listen(3065, () => {
     console.log("Server is Running!");
