@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -16,9 +16,15 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
     const dispatch = useDispatch();
-    const { logInLoading } = useSelector((state) => state.user);
+    const { logInLoading, logInError } = useSelector((state) => state.user);
     const [email, onChangeEmail] = useInput('');
     const [password, onChangePassword] = useInput('');
+
+    useEffect(() => {
+        if (logInError) {
+            alert(logInError);
+        }
+    }, [logInError]);
 
     const onSubmitForm = useCallback(() => {
         // onFinish에는 이미 e.preventDefault()가 적용되어 있기 때문에 적용하면 안돼!

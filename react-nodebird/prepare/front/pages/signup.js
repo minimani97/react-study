@@ -15,12 +15,18 @@ const ErrorMessage = styled.div`
 
 const SignUp = () => {
     const dispatch = useDispatch();
-    const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
+    const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        if (me && me.id) {
+            Router.replace('/'); // 뒤로가기 했을 때 해당 페이지가 나오지 않게 함 (push는 뒤로가기 하면 해당 페이지 나옴)
+        }
+    }, [me && me.id]);
 
     useEffect(() => {
         if (signUpDone) {
             alert('회원가입이 완료되었습니다:)\n로그인 해주세요!');
-            Router.push('/');
+            Router.replace('/');
         }
     }, [signUpDone]);
 

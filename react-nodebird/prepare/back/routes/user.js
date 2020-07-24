@@ -1,12 +1,50 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
+
 const router = express.Router();
 
-// db
-const { User } = require('../models');
+const { User, Post } = require('../models');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+
+// POST /user/login
+router.post('/login', isNotLoggedIn, (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            console.error(err);
+            return next(err);
+        }
+        if (info) {
+            return res.status(401).send(info.reason);
+        }
+        return req.login(user, async (loginErr) => {
+            if (loginErr) {
+                console.error(loginErr);
+                return next(loginErr);
+            }
+
+            const fullUserWithoutPassword = await User.findOne({
+                where: { id: user.id },
+                attributes: {
+                    exclude: ['password']
+                },
+                include: [{
+                    model: Post,
+                }, {
+                    model: User,
+                    as: 'Followings',
+                }, {
+                    model: User,
+                    as: 'Followers',
+                }]
+            });
+            return res.status(200).json(fullUserWithoutPassword);
+        });
+    })(req, res, next);
+});
 
 // POST /user
-router.post('/', async (req, res, next) => {
+router.post('/', isNotLoggedIn, async (req, res, next) => {
     try {
         // 공식문서 보고 해당 함수가 비동기인지 아닌지 확인하고 await 붙여주기~!~!
         const exUser = await User.findOne({
@@ -29,6 +67,13 @@ router.post('/', async (req, res, next) => {
         console.log(error);
         next(error);  // 에러가 발생하면 express가 알아서 브라우저로 에러가 났다고 알려주는데, 이를 위해 설정해둠
     }
+});
+
+// POST /user/logout
+router.post('/logout', isLoggedIn, (req, res) => {
+    req.logout();
+    req.session.destroy();
+    res.send('ok');
 });
 
 module.exports = router;

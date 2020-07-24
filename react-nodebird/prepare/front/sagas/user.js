@@ -9,18 +9,16 @@ import {
     UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
 } from '../reducers/user';
 
-function logInAPI() {
-    return axios.post('/api/login');
+function logInAPI(data) {
+    return axios.post('/user/login', data);
 }
 
 function* logIn(action) {
-    console.log('saga logIn');
     try {
-        // const result = yield call(logInAPI);
-        yield delay(1000);
+        const result = yield call(logInAPI, action.data);
         yield put({
             type: LOG_IN_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
     } catch (err) {
         yield put({
@@ -31,14 +29,13 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-    return axios.post('/api/logout');
+    return axios.post('/user/logout');
 }
 
 function* logOut() {
     console.log('saga logOut');
     try {
-        // const result = yield call(logOutAPI);
-        yield delay(1000);
+        yield call(logOutAPI);
         yield put({
             type: LOG_OUT_SUCCESS,
         });
