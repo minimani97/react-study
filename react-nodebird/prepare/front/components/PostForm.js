@@ -17,6 +17,10 @@ const PostForm = () => {
     }, [addPostDone]);
 
     const onSubmit = useCallback(() => {
+        if(text === '') {
+            alert('내용을 입력하세요!');
+            return;
+        }
         dispatch(addPost(text));
     }, [text]);
 

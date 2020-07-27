@@ -65,15 +65,6 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
-const dummyUser = (data) => ({
-    ...data,
-    nickname: 'Kate',
-    id: 1,
-    Posts: [{ id: 1 }],
-    Followings: [{ nickname: '이재욱' }, { nickname: 'NodeBird Korea' }, { nickname: '곽승민' }],
-    Followers: [{ nickname: '이재욱' }, { nickname: '곽승민' }],
-});
-
 // action creator
 export const loginRequestAction = (data) => {
     console.log('reducer logIn');
@@ -153,8 +144,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             draft.changeNicknameError = null;
             break;
         case CHANGE_NICKNAME_SUCCESS:
+            draft.me.nickname = action.data.nickname;
             draft.changeNicknameLoading = false;
-            draft.me = null;
             draft.changeNicknameDone = true;
             break;
         case CHANGE_NICKNAME_FAILURE:

@@ -141,7 +141,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case REMOVE_POST_SUCCESS:
             draft.removePostLoading = false;
             draft.removePostDone = true;
-            draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+            draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
             // filter() : 조건문에 맞는 요소들을 모아 새로운 배열로 반환해주는 함수
             break;
         case REMOVE_POST_FAILURE:
