@@ -83,7 +83,7 @@ router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
             return res.status(403).send('해당 게시글이 존재하지 않습니다.');
         }
         await post.addLikers(req.user.id);
-        res.json({ postId: post.id, UserId: req.user.id });
+        res.json({ PostId: post.id, UserId: req.user.id });
     } catch(error) {
         console.error(error);
         next(error);
@@ -98,7 +98,7 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
             return res.status(403).send('해당 게시글이 존재하지 않습니다.');
         }
         await post.removeLikers(req.user.id);
-        res.json({ postId: post.id, UserId: req.user.id });
+        res.json({ PostId: post.id, UserId: req.user.id });
     } catch(error) {
         console.error(error);
         next(error);

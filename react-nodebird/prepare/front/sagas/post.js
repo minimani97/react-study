@@ -23,6 +23,7 @@ function* likePost(action) {
             data: result.data,
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: LIKE_POST_FAILURE,
             data: err.response.data,
@@ -42,6 +43,7 @@ function* unlikePost(action) {
             data: result.data,
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: UNLIKE_POST_FAILURE,
             data: err.response.data,
@@ -69,7 +71,6 @@ function* loadPosts(action) {
 }
 
 function addPostAPI(data) {
-    console.log("addPostAPI");
     return axios.post('/post', { content: data });
 }
 
