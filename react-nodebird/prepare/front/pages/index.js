@@ -12,7 +12,13 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const { me } = useSelector((state) => state.user);
-    const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
+    const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } = useSelector((state) => state.post);
+
+    useEffect(() => {
+        if (retweetError) {
+            alert(retweetError);
+        }
+    }, [retweetError]);
 
     useEffect(() => {
         dispatch({
@@ -28,8 +34,10 @@ const Home = () => {
             // scrollY : 얼마나 내렸는지, clientHeight: 현재 화면의 세로 길이, scrollHeight: 총 길이
             if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 400) {
                 if (hasMorePosts && !loadPostsLoading) {
+                    const lastId = mainPosts[mainPosts.length - 1]?.id;
                     dispatch({
                         type: LOAD_POSTS_REQUEST,
+                        lastId,
                     });
                 }
             }

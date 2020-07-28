@@ -33,6 +33,10 @@ export const initialState = {
     uploadImagesLoading: false,
     uploadImagesDone: false,
     uploadImagesError: null,
+
+    retweetLoading: false,
+    retweetDone: false,
+    retweetError: null,
 };
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -65,6 +69,10 @@ export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 
 export const REMOVE_IMAGE = 'REMOVE_IMAGE'; /* 동기 action이기 때문에 하나만 만들어줘도 돼!
                                               (서버쪽에서도 지우고 싶다면 위 action들처럼 비동기로 만들어 주어야 한다ㅎ.ㅎ) */
+
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
 // user reducer의 상태를 바꿀 수 있는 액션
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
@@ -122,8 +130,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case LOAD_POSTS_SUCCESS:
             draft.loadPostsLoading = false;
             draft.loadPostsDone = true;
-            draft.mainPosts = action.data.concat(draft.mainPosts);
-            draft.hasMorePosts = draft.mainPosts.length < 50; // 게시글을 50개씩만 보겠다!
+            draft.mainPosts = draft.mainPosts.concat(action.data);
+            draft.hasMorePosts = draft.mainPosts.length === 10;
             break;
         case LOAD_POSTS_FAILURE:
             draft.loadPostsLoading = false;
@@ -192,6 +200,21 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             break;
         case REMOVE_IMAGE:
             draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+            break;
+        case RETWEET_REQUEST:
+            draft.retweetLoading = true;
+            draft.retweetDone = false;
+            draft.retweetError = null;
+            break;
+        case RETWEET_SUCCESS: {
+            draft.retweetLoading = false;
+            draft.retweetDone = true;
+            draft.mainPosts.unshift(action.data);
+            break;
+        }
+        case RETWEET_FAILURE:
+            draft.retweetLoading = false;
+            draft.retweetError = action.error;
             break;
         default:
             break;
