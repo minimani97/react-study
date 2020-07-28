@@ -29,6 +29,10 @@ export const initialState = {
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+
+    uploadImagesLoading: false,
+    uploadImagesDone: false,
+    uploadImagesError: null,
 };
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
@@ -54,6 +58,13 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+
+export const REMOVE_IMAGE = 'REMOVE_IMAGE'; /* 동기 action이기 때문에 하나만 만들어줘도 돼!
+                                              (서버쪽에서도 지우고 싶다면 위 action들처럼 비동기로 만들어 주어야 한다ㅎ.ㅎ) */
 
 // user reducer의 상태를 바꿀 수 있는 액션
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
@@ -126,8 +137,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case ADD_POST_SUCCESS:
             draft.addPostLoading = false;
             draft.addPostDone = true;
-            // 새로 추가한 게시글이 가장 위에 위치하도록 dummyPost를 ...state.mainPosts보다 앞에 추가
             draft.mainPosts.unshift(action.data);
+            draft.imagePaths = [];
             break;
         case ADD_POST_FAILURE:
             draft.addPostLoading = false;
@@ -163,6 +174,24 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case ADD_COMMENT_FAILURE:
             draft.addCommentLoading = false;
             draft.addCommentError = action.error;
+            break;
+        case UPLOAD_IMAGES_REQUEST:
+            draft.uploadImagesLoading = true;
+            draft.uploadImagesDone = false;
+            draft.uploadImagesError = null;
+            break;
+        case UPLOAD_IMAGES_SUCCESS: {
+            draft.imagePaths = action.data;
+            draft.uploadImagesLoading = false;
+            draft.uploadImagesDone = true;
+            break;
+        }
+        case UPLOAD_IMAGES_FAILURE:
+            draft.uploadImagesLoading = false;
+            draft.uploadImagesError = action.error;
+            break;
+        case REMOVE_IMAGE:
+            draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
             break;
         default:
             break;

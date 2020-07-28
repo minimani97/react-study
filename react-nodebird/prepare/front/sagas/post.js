@@ -1,4 +1,4 @@
-import { all, put, fork, takeLatest, delay, throttle, call } from 'redux-saga/effects';
+import { all, put, fork, takeLatest, throttle, call } from 'redux-saga/effects';
 import axios from 'axios';
 
 import {
@@ -9,6 +9,7 @@ import {
     LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE,
     LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE,
     UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE,
+    UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE,
 } from '../reducers/post';
 
 function likePostAPI(data) {
@@ -71,7 +72,7 @@ function* loadPosts(action) {
 }
 
 function addPostAPI(data) {
-    return axios.post('/post', { content: data });
+    return axios.post('/post', data);
 }
 
 function* addPost(action) {
@@ -137,6 +138,27 @@ function* addComment(action) {
     }
 }
 
+function uploadImagesAPI(data) {
+    return axios.post('/post/images', data); /* form data는 {}로 감싸지 말고 데이터 그대로 보내야 해!
+                                                 ({}로 감싸면 JSON이 되어 버림!) */
+}
+
+function* uploadImages(action) {
+    try {
+        const result = yield call(uploadImagesAPI, action.data);
+        yield put({
+            type: UPLOAD_IMAGES_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: UPLOAD_IMAGES_FAILURE,
+            data: err.response.data,
+        });
+    }
+}
+
 function* watchLikePost() {
     yield throttle(5000, LIKE_POST_REQUEST, likePost);
 }
@@ -161,6 +183,10 @@ function* watchAddComment() {
     yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function* watchUploadImages() {
+    yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchLikePost),
@@ -169,5 +195,6 @@ export default function* postSaga() {
         fork(watchAddPost),
         fork(watchRemovePost),
         fork(watchAddComment),
+        fork(watchUploadImages),
     ]);
 }
