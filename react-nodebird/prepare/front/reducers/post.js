@@ -210,6 +210,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             draft.retweetLoading = false;
             draft.retweetDone = true;
             draft.mainPosts.unshift(action.data);
+            alert('리트윗 되었습니다:)');
             break;
         }
         case RETWEET_FAILURE:

@@ -133,7 +133,7 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {
         const retweet = await Post.create({
             UserId: req.user.id,
             RetweetId: retweetTargetId,
-            content: 'RETWEET',
+            content: 'Retweet',
         });
         const retweetWithPrevPost = await Post.findOne({
             where: { id: retweet.id },
@@ -149,6 +149,10 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {
             }, {
                 model: User,
                 attributes: ['id', 'nickname'],
+            }, {
+                model: User,
+                as: 'Likers',
+                attributes: ['id'],
             }, {
                 model: Image,
             }, {

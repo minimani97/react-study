@@ -3,6 +3,9 @@ const path = require('path');
 module.exports = {
     mode: 'development',
     devtool: 'eval',
+    devServer: {
+        histpryApiFallback: true
+    }
     resolve: {
         extensions: ['.js', '.jsx']
     },
