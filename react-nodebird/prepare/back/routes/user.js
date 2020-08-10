@@ -83,7 +83,6 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
 
 // GET /user
 router.get('/', async (req, res, next) => {
-    console.log(req.headers);
     try {
         if (req.user) {
             const fullUserWithoutPassword = await User.findOne({
@@ -104,10 +103,46 @@ router.get('/', async (req, res, next) => {
                     attributes: ['id'],
                 }]
             });
-
             res.status(200).json(fullUserWithoutPassword);
         } else{
             res.status(200).json(null);
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+// GET /user/{userId}
+router.get('/:userId', async (req, res, next) => {
+    try {
+        const fullUserWithoutPassword = await User.findOne({
+            where: { id: req.params.userId },
+            attributes: {
+                exclude: ['password']
+            },
+            include: [{
+                model: Post,
+                attributes: ['id'],
+            }, {
+                model: User,
+                as: 'Followings',
+                attributes: ['id'],
+            }, {
+                model: User,
+                as: 'Followers',
+                attributes: ['id'],
+            }]
+        });
+        if (fullUserWithoutPassword) {
+            // 다른 유저의 정보이기 때문에 노출되지 않도록 변경
+            const data = fullUserWithoutPassword.toJSON();
+            data.Posts = data.Posts.length;
+            data.Followers = data.Followers.length;
+            data.Followings = data.Followings.length;
+            res.status(200).json(data);
+        } else {
+            res.status(404).json("존재하지 않는 사용자입니다.");
         }
     } catch (error) {
         console.error(error);
