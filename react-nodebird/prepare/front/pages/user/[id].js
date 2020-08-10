@@ -19,6 +19,10 @@ const User = () => {
     const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
     const { userInfo, me } = useSelector((state) => state.user);
 
+    // if (router.isFallback) {
+    //     return <div>로딩중...!</div>;
+    // }
+
     useEffect(() => {
         const onScroll = () => {
             if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
@@ -85,6 +89,17 @@ const User = () => {
         </AppLayout>
     );
 };
+
+// export async function getStaticPaths() {
+//     return {
+//         paths: [
+//             { params: { id: '1' } },
+//             { params: { id: '2' } },
+//             { params: { id: '3' } },
+//         ],
+//         fallback: false,
+//     };
+// }
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
     const cookie = context.req ? context.req.headers.cookie : '';

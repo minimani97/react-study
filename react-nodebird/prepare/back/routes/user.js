@@ -114,6 +114,40 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+// GET /user/followers
+router.get('/followers', isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user.id } });
+        if(!user) {
+            res.status(403).send('현재 접속하신 계정은 존재하지 않는 계정입니다.');
+        }
+        const followers = await user.getFollowers({
+            limit: parseInt(req.query.limit, 10),
+        });
+        res.status(200).json(followers);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+// GET /user/followings
+router.get('/followings', isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user.id } });
+        if(!user) {
+            res.status(403).send('현재 접속하신 계정은 존재하지 않는 계정입니다.');
+        }
+        const followings = await user.getFollowings({
+            limit: parseInt(req.query.limit, 10),
+        });
+        res.status(200).json(followings);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 // GET /user/{userId}
 router.get('/:userId', async (req, res, next) => {
     try {
@@ -190,36 +224,6 @@ router.delete('/:userId/follow', isLoggedIn, async (req, res, next) => {
         }
         await user.removeFollowers(req.user.id);
         res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
-
-// GET /user/followers
-router.get('/followers', isLoggedIn, async (req, res, next) => {
-    try {
-        const user = await User.findOne({ where: { id: req.user.id } });
-        if(!user) {
-            res.status(403).send('현재 접속하신 계정은 존재하지 않습니다.');
-        }
-        const followers = await user.getFollowers();
-        res.status(200).json(followers);
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
-
-// GET /user/followings
-router.get('/followings', isLoggedIn, async (req, res, next) => {
-    try {
-        const user = await User.findOne({ where: { id: req.user.id } });
-        if(!user) {
-            res.status(403).send('현재 접속하신 계정은 존재하지 않습니다.');
-        }
-        const followings = await user.getFollowings();
-        res.status(200).json(followings);
     } catch (error) {
         console.error(error);
         next(error);
