@@ -8,7 +8,7 @@ export default class MyDocument extends Document {
         const originalRenderPage = ctx.renderPage;
 
         try {
-            ctx.originalRenderPage = () => originalRenderPage({
+            ctx.renderPage = () => originalRenderPage({
                 enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
             });
             const initialProps = await Document.getInitialProps(ctx);
@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
                 ),
             };
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             sheet.seal();
         }
