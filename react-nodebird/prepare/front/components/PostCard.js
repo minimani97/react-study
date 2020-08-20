@@ -4,12 +4,22 @@ import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
 import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
+import moment from 'moment';
+import { createGlobalStyle } from 'styled-components';
 
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import FollowButton from './FollowButton';
 import PostCardContent from './PostCardContent';
 import { REMOVE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
+
+moment.locale('ko');
+
+export const Global = createGlobalStyle`
+    .ant-card-meta-description {
+        color: #6f6f6f;
+    }
+`;
 
 const PostCard = ({ post }) => {
     const dispatch = useDispatch();
@@ -72,6 +82,7 @@ const PostCard = ({ post }) => {
 
     return (
         <div style={{ marginBottom: 20 }}>
+            <Global />
             <Card
                 cover={post.Images[0] && <PostImages images={post.Images} />}
                 actions={[
@@ -105,6 +116,7 @@ const PostCard = ({ post }) => {
                         <Card
                             cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
                         >
+                            <div style={{ float: 'right', color: '#989898' }}>{moment(post.createdAt).fromNow()}</div>
                             <Card.Meta
                                 avatar={(
                                     <Link href={`/user/${post.Retweet.User.id}`}>
@@ -117,15 +129,18 @@ const PostCard = ({ post }) => {
                         </Card>
                     )
                     : (
-                        <Card.Meta
-                            avatar={(
-                                <Link href={`/user/${post.User.id}`}>
-                                    <a><Avatar>{post.User.nickname[0]}</Avatar></a>
-                                </Link>
-                            )}
-                            title={post.User.nickname}
-                            description={<PostCardContent postData={post.content} />}
-                        />
+                        <>
+                            <div style={{ float: 'right', color: '#989898' }}>{moment(post.createdAt).fromNow()}</div>
+                            <Card.Meta
+                                avatar={(
+                                    <Link href={`/user/${post.User.id}`}>
+                                        <a><Avatar>{post.User.nickname[0]}</Avatar></a>
+                                    </Link>
+                                )}
+                                title={post.User.nickname}
+                                description={<PostCardContent postData={post.content} />}
+                            />
+                        </>
                     )}
             </Card>
             {commentFormOpened && (
